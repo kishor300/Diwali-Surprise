@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Diwali Animation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        /* Style for the fireworks container */
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            display: flex; /* Centering using flexbox */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; /* Stack elements vertically */
+            font-size: 50px;
+        }
+
+        .firework-container {
+            position: absolute; /* Make fireworks independent of text */
+            width: 100vw;
+            height: 100vh;
+            top: 0; /* Full height */
+            left: 0; /* Full width */
+        }
+
+        /* Style for the message */
+        .diwali-message {
+            text-align: center;
+            color: #fff;
+            z-index: 10; /* Bring the text above the fireworks */
+        }
+
+        .diwali-text {
+            margin: 2vh 0; /* Margin adjusted for vertical spacing */
+            font-size: 20vh; /* Responsive font size */
+            font-family: 'Great Vibes', cursive;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        /* Animation for glowing text */
+        @keyframes glow {
+            from {
+                color: #ffc107;
+                text-shadow: 0 0 10px #ffc107, 0 0 20px #ffc107, 0 0 30px #ff8c00;
+            }
+            to {
+                color: #ff8c00;
+                text-shadow: 0 0 20px #ff8c00, 0 0 30px #ff8c00, 0 0 40px #ff4500;
+            }
+        }
+
+        /* Moving animation for "Divya" */
+        .movable-divya {
+            margin: 2vh 0; /* Margin adjusted for vertical spacing */
+            display: block;
+            font-weight: bold;
+            color: #ff4081;
+            font-size: 4vw; /* Responsive font size */
+            font-family: 'Great Vibes', cursive;
+            animation: moveDivya 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveDivya {
+            0% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* Diya styles */
+        .diya {
+            position: relative;
+            width: 7vw; 
+            height: 6vw;
+            background-color: #8B4513; /* Brown for diya */
+            border-radius: 25% 25% 70% 70%;
+            bottom: 15%; /* Adjust position */
+            margin-top: 10vw; /* Space from "Divya" text */
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 100%; /* Position above diya */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2vw; /* Width relative to viewport width */
+            height: 2vw; /* Height relative to viewport width */
+            background-color: yellow;
+            border-radius: 50%;
+            animation: flicker 0.7s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% {
+                height: 2vw;
+                background-color: #ffcc00;
+                box-shadow: 0 0 10px #ffcc00;
+            }
+            50% {
+                height: 3vw;
+                background-color: #ffff00;
+                box-shadow: 0 0 15px #ffff00;
+            }
+            100% {
+                height: 1.5vw;
+                background-color: #ffcc00;
+                box-shadow: 0 0 5px #ffcc00;
+            }
+        }
+
+        /* Rocket launch animation */
+        .rocket {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background: red;
+            border-radius: 5px;
+            bottom: 0;
+        }
+
+        /* Sparkle and boom styles */
+        .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            animation: sparkle 1s infinite;
+        }
+
+        .boom {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 0, 0.8);
+            animation: explode 0.5s ease-out forwards;
+        }
+
+        /* Firework explosion animation */
+        @keyframes explode {
+            0% {
+                transform: scale(0.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 600px) {
+            .diwali-text {
+                font-size: 6vw; /* Increase font size for small screens */
+            }
+            .movable-divya {
+                font-size: 5vw; /* Increase font size for small screens */
+            }
+            .diya {
+                width: 10vw; /* Adjust diya size for mobile */
+                height: 8vw; /* Adjust diya size for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="firework-container"></div>
+    
+    <div class="diwali-message">
+        <span class="diwali-text">Happy Diwali</span>
+        <span class="movable-divya">Divya</span>
+    </div>
+
+    <div class="diya">
+        <div class="flame"></div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function createFirework(x, y) {
+                // Create the rocket
+                let rocket = $('<div class="rocket"></div>');
+                rocket.css({ left: x - 5 + 'px', bottom: '0' });
+                $(".firework-container").append(rocket);
+
+                // Animate the rocket launch to a set height before exploding
+                rocket.animate({ bottom: '+=300px' }, 1000, function() {
+                    // After the rocket reaches the top, create the boom effect
+                    let boom = $('<div class="boom"></div>');
+                    boom.css({
+                        left: x - 15 + 'px',
+                        top: (y - 300) + 'px' // Place the boom at the explosion height
+                    });
+                    $(".firework-container").append(boom);
+
+                    boom.on('animationend', function () {
+                        $(this).remove();
+                    });
+
+                    // Create sparkling lights with varying sizes and wider spread
+                    for (let i = 0; i < 30; i++) {
+                        let sparkle = $('<div class="sparkle"></div>');
+                        let size = Math.random() * 4 + 2; // Random size between 2px and 6px
+                        sparkle.css({
+                            width: size + 'px',
+                            height: size + 'px',
+                            left: x + 'px',
+                            top: (y - 300) + 'px',
+                            background: `hsl(${Math.random() * 360}, 100%, 90%)`,
+                            transform: `translate(${(Math.random() - 0.5) * 300}px, ${(Math.random() - 0.5) * 300}px)` // Wider spread
+                        });
+
+                        sparkle.appendTo(".firework-container");
+                        
+                        // Remove sparkle after 1 second to clear the sky
+                        setTimeout(() => {
+                            sparkle.fadeOut(500, function() {
+                                $(this).remove();
+                            });
+                        }, 1000);
+                    }
+                    rocket.remove(); // Remove the rocket after launch
+                });
+            }
+
+            $(document).click(function (e) {
+                // Launch rockets from different positions on click
+                let randomY = Math.random() * (window.innerHeight - 200) + 200; // Ensure some height for launch
+                createFirework(e.pageX, randomY);
+            });
+
+            // Automatically launch rockets at random intervals from random positions
+            setInterval(function () {
+                let x = Math.random() * $(window).width();
+                let randomY = Math.random() * (window.innerHeight - 200) + 200; // Ensure some height for launch
+                createFirework(x, randomY);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
